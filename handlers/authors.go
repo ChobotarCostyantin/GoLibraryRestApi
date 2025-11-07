@@ -15,8 +15,8 @@ func GetAuthorsHandler(w http.ResponseWriter, r *http.Request) {
 	defer storage.Store.RUnlock()
 
 	query := r.URL.Query()
-	firstName := query.Get("first_name")
-	lastName := query.Get("last_name")
+	firstName := strings.ToLower(query.Get("first_name"))
+	lastName := strings.ToLower(query.Get("last_name"))
 	age := query.Get("age")
 
 	if firstName == "" && lastName == "" && age == "" {
@@ -29,11 +29,11 @@ func GetAuthorsHandler(w http.ResponseWriter, r *http.Request) {
 	for _, author := range storage.Store.Authors {
 		match := true
 
-		if firstName != "" && !strings.Contains(strings.ToLower(author.FirstName), strings.ToLower(firstName)) {
+		if firstName != "" && !strings.Contains(strings.ToLower(author.FirstName), firstName) {
 			match = false
 		}
 
-		if lastName != "" && !strings.Contains(strings.ToLower(author.LastName), strings.ToLower(lastName)) {
+		if lastName != "" && !strings.Contains(strings.ToLower(author.LastName), lastName) {
 			match = false
 		}
 		

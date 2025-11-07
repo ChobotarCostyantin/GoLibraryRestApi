@@ -16,7 +16,7 @@ func GetBooksHandler(w http.ResponseWriter, r *http.Request) {
 	
 	query := r.URL.Query()
 	authorIDStr := query.Get("author_id")
-	title := query.Get("title")
+	title := strings.ToLower(query.Get("title"))
 	pages := query.Get("pages")
 
 	if authorIDStr == "" && title == "" && pages == "" {
@@ -36,7 +36,7 @@ func GetBooksHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		if title != "" && !strings.Contains(strings.ToLower(book.Title), strings.ToLower(title)) {
+		if title != "" && !strings.Contains(strings.ToLower(book.Title), title) {
 			match = false
 		}
 
