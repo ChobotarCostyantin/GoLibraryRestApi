@@ -6,13 +6,54 @@ import (
 	"github.com/ChobotarCostyantin/GoLibraryRestApi/storage"
 	"github.com/ChobotarCostyantin/GoLibraryRestApi/utils"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 func GetLibrariansHandler(w http.ResponseWriter, r *http.Request) {
 	storage.Store.RLock()
 	defer storage.Store.RUnlock()
-	utils.RespondJSON(w, http.StatusOK, storage.Store.Librarians)
+
+	query := r.URL.Query()
+	firstName := query.Get("first_name")
+	lastName := query.Get("last_name")
+	age := query.Get("age")
+
+	if firstName == "" && lastName == "" && age == "" {
+		utils.RespondJSON(w, http.StatusOK, storage.Store.Librarians)
+		return
+	}
+
+	var filteredLibrarians []models.Librarian
+
+	for _, librarian := range storage.Store.Librarians {
+		match := true
+
+		if firstName != "" && !strings.Contains(strings.ToLower(librarian.FirstName), strings.ToLower(firstName)) {
+			match = false
+		}
+
+		if lastName != "" && !strings.Contains(strings.ToLower(librarian.LastName), strings.ToLower(lastName)) {
+			match = false
+		}
+		
+		if age != "" {
+			ageInt, err := strconv.Atoi(age)
+			if err != nil || librarian.Age != ageInt {
+				match = false
+			}
+		}
+
+		if match {
+			filteredLibrarians = append(filteredLibrarians, librarian)
+		}
+	}
+
+	if filteredLibrarians == nil {
+		filteredLibrarians = []models.Librarian{}
+	}
+
+	utils.RespondJSON(w, http.StatusOK, filteredLibrarians)
 }
 
 func GetLibrarianHandler(w http.ResponseWriter, r *http.Request) {

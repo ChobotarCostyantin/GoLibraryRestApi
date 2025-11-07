@@ -6,13 +6,57 @@ import (
 	"github.com/ChobotarCostyantin/GoLibraryRestApi/storage"
 	"github.com/ChobotarCostyantin/GoLibraryRestApi/utils"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 func GetBooksHandler(w http.ResponseWriter, r *http.Request) {
 	storage.Store.RLock()
 	defer storage.Store.RUnlock()
-	utils.RespondJSON(w, http.StatusOK, storage.Store.Books)
+	
+	query := r.URL.Query()
+	authorIDStr := query.Get("author_id")
+	title := query.Get("title")
+	pages := query.Get("pages")
+
+	if authorIDStr == "" && title == "" && pages == "" {
+		utils.RespondJSON(w, http.StatusOK, storage.Store.Books)
+		return
+	}
+
+	var filteredBooks []models.Book
+
+	for _, book := range storage.Store.Books {
+		match := true
+
+		if authorIDStr != "" {
+			authorID, err := strconv.Atoi(authorIDStr)
+			if err != nil || book.Pages != authorID {
+				match = false
+			}
+		}
+
+		if title != "" && !strings.Contains(strings.ToLower(book.Title), strings.ToLower(title)) {
+			match = false
+		}
+
+		if pages != "" {
+			ageInt, err := strconv.Atoi(pages)
+			if err != nil || book.Pages != ageInt {
+				match = false
+			}
+		}
+		
+		if match {
+			filteredBooks = append(filteredBooks, book)
+		}
+	}
+
+	if filteredBooks == nil {
+		filteredBooks = []models.Book{}
+	}
+
+	utils.RespondJSON(w, http.StatusOK, filteredBooks)
 }
 
 func GetBookHandler(w http.ResponseWriter, r *http.Request) {

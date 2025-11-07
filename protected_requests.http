@@ -1,0 +1,230 @@
+### Get information about API
+GET http://localhost:8080/
+
+##################################
+# AUTHORS
+##################################
+
+# 1. Get all authors
+GET http://localhost:8080/authors
+X-API-Key: secret-api-key-123
+
+# 1,1. Get all authors with filter by first name
+GET http://localhost:8080/authors?first_name=John
+X-API-Key: secret-api-key-123
+
+# 1,2. Get all authors with filter by last name
+GET http://localhost:8080/authors?last_name=Doe
+X-API-Key: secret-api-key-123
+
+# 1,3. Get all authors with filter by age
+GET http://localhost:8080/authors?age=1990
+X-API-Key: secret-api-key-123
+
+# 1,4. Get all authors with multiple filters
+GET http://localhost:8080/authors?first_name=John&last_name=Doe
+X-API-Key: secret-api-key-123
+
+# 2. Get author by ID
+GET http://localhost:8080/authors/1
+X-API-Key: secret-api-key-123
+
+# 3,1. Create new author
+POST http://localhost:8080/authors
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "first_name": "John",
+    "last_name": "Doe",
+    "age": 1990
+}
+
+# 3,2. Create new author
+POST http://localhost:8080/authors
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "first_name": "Charlie",
+    "last_name": "Kirk",
+    "age": 1993
+}
+
+# 3,3. Create new author
+POST http://localhost:8080/authors
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "first_name": "John",
+    "last_name": "Lennon",
+    "age": 1940
+}
+
+# 4. Update author
+PUT http://localhost:8080/authors/1
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "age": 2000
+}
+
+# 5. Delete author
+DELETE http://localhost:8080/authors/1
+X-API-Key: secret-api-key-123
+
+##################################
+# BOOKS
+##################################
+
+# 1. Get all books
+GET http://localhost:8080/books
+X-API-Key: secret-api-key-123
+
+# 1,1. Get all books with filter by author id
+GET http://localhost:8080/books?author_id=1
+X-API-Key: secret-api-key-123
+
+# 1,2. Get all books with filter by title
+GET http://localhost:8080/books?title=The%20Lord%20of%20the%20Rings
+X-API-Key: secret-api-key-123
+
+# 1,3. Get all books with filter by pages
+GET http://localhost:8080/books?pages=100
+X-API-Key: secret-api-key-123
+
+# 1,4. Get all books with multiple filters
+GET http://localhost:8080/books?author_id=1&title=The%20Lord%20of%20the%20Rings
+X-API-Key: secret-api-key-123
+
+# 2. Get book by ID
+GET http://localhost:8080/books/1
+X-API-Key: secret-api-key-123
+
+# 3,1. Create new book
+POST http://localhost:8080/books
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "author_id": 1,
+    "title": "The Lord of the Rings",
+    "pages": 100
+}
+
+# 3,2. Create new book
+POST http://localhost:8080/books
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "author_id": 1,
+    "title": "The Hobbit",
+    "pages": 200
+}
+
+# 3,3. Create new book
+POST http://localhost:8080/books
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "author_id": 2,
+    "title": "The Lord of the Rings",
+    "pages": 150
+}
+
+# 4. Update book
+PUT http://localhost:8080/books/1
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "author_id": 3,
+    "title": "The Lord of the Rings",
+    "pages": 200
+}
+
+# 5. Delete book
+DELETE http://localhost:8080/books/1
+X-API-Key: secret-api-key-123
+
+##################################
+# LIBRARIANS
+##################################
+
+# 1. Get all librarians
+GET http://localhost:8080/librarians
+X-API-Key: secret-api-key-123
+
+# 1,1. Get all librarians with filter by first name
+GET http://localhost:8080/librarians?first_name=Worker
+X-API-Key: secret-api-key-123
+
+# 1,2. Get all librarians with filter by last name
+GET http://localhost:8080/librarians?last_name=One
+X-API-Key: secret-api-key-123
+
+# 1,3. Get all librarians with filter by age
+GET http://localhost:8080/librarians?age=1990
+X-API-Key: secret-api-key-123
+
+# 1,4. Get all librarians with multiple filters
+GET http://localhost:8080/librarians?first_name=Worker&last_name=One
+X-API-Key: secret-api-key-123
+
+# 2. Get librarian by ID
+GET http://localhost:8080/librarians/1
+X-API-Key: secret-api-key-123
+
+# 3,1. Create new librarian
+POST http://localhost:8080/librarians
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "first_name": "Worker",
+    "last_name": "One",
+    "age": 1990
+}
+
+# 3,2. Create new librarian
+POST http://localhost:8080/librarians
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "first_name": "Worker",
+    "last_name": "Two",
+    "age": 1991
+}
+
+# 3,3. Create new librarian
+POST http://localhost:8080/librarians
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "first_name": "Worker",
+    "last_name": "Three",
+    "age": 1992
+}
+
+# 4. Update librarian
+PUT http://localhost:8080/librarians/1
+Content-Type: application/json
+X-API-Key: secret-api-key-123
+
+{
+    "first_name": "Worker",
+    "last_name": "One Updated",
+    "age": 1990
+}
+
+# 5. Delete librarian
+DELETE http://localhost:8080/librarians/1
+X-API-Key: secret-api-key-123

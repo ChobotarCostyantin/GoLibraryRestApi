@@ -45,3 +45,4 @@ go.work.sum
 
 # Data
 library_data.json
+api_logs.json

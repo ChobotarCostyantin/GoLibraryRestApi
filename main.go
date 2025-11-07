@@ -1,10 +1,11 @@
 package main
 
 import (
+	"github.com/ChobotarCostyantin/GoLibraryRestApi/handlers"
+	"github.com/ChobotarCostyantin/GoLibraryRestApi/middleware"
+	"github.com/ChobotarCostyantin/GoLibraryRestApi/storage"
 	"log"
 	"net/http"
-	"github.com/ChobotarCostyantin/GoLibraryRestApi/handlers"
-	"github.com/ChobotarCostyantin/GoLibraryRestApi/storage"
 )
 
 func main() {
@@ -13,17 +14,47 @@ func main() {
 	}
 
 	// Routers
-	http.HandleFunc("/authors", handlers.AuthorsRouter)
-	http.HandleFunc("/authors/", handlers.AuthorsRouter)
-	http.HandleFunc("/books", handlers.BooksRouter)
-	http.HandleFunc("/books/", handlers.BooksRouter)
-	http.HandleFunc("/librarians", handlers.LibrariansRouter)
-	http.HandleFunc("/librarians/", handlers.LibrariansRouter)
+	http.HandleFunc("/authors", middleware.Chain(
+		handlers.AuthorsRouter,
+		middleware.LoggingMiddleware,
+		middleware.AuthMiddleware,
+	))
 
-	// Root page with api description
-	http.HandleFunc("/", handlers.RootHandler)
+	http.HandleFunc("/authors/", middleware.Chain(
+		handlers.AuthorsRouter,
+		middleware.LoggingMiddleware,
+		middleware.AuthMiddleware,
+	))
+
+	http.HandleFunc("/books", middleware.Chain(
+		handlers.BooksRouter,
+		middleware.LoggingMiddleware,
+		middleware.AuthMiddleware,
+	))
+
+	http.HandleFunc("/books/", middleware.Chain(
+		handlers.BooksRouter,
+		middleware.LoggingMiddleware,
+		middleware.AuthMiddleware,
+	))
+
+	http.HandleFunc("/librarians", middleware.Chain(
+		handlers.LibrariansRouter,
+		middleware.LoggingMiddleware,
+		middleware.AuthMiddleware,
+	))
+
+	http.HandleFunc("/librarians/", middleware.Chain(
+		handlers.LibrariansRouter,
+		middleware.LoggingMiddleware,
+		middleware.AuthMiddleware,
+	))
+
+	http.HandleFunc("/", middleware.LoggingMiddleware(handlers.RootHandler))
 
 	port := ":8080"
+	log.Printf("Server starting on port %s", port)
+	log.Printf("API Key for authorization: %s", middleware.ValidAPIKey)
 
 	log.Fatal(http.ListenAndServe(port, nil))
 }

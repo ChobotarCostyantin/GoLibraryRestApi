@@ -6,13 +6,54 @@ import (
 	"github.com/ChobotarCostyantin/GoLibraryRestApi/storage"
 	"github.com/ChobotarCostyantin/GoLibraryRestApi/utils"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 func GetAuthorsHandler(w http.ResponseWriter, r *http.Request) {
 	storage.Store.RLock()
 	defer storage.Store.RUnlock()
-	utils.RespondJSON(w, http.StatusOK, storage.Store.Authors)
+
+	query := r.URL.Query()
+	firstName := query.Get("first_name")
+	lastName := query.Get("last_name")
+	age := query.Get("age")
+
+	if firstName == "" && lastName == "" && age == "" {
+		utils.RespondJSON(w, http.StatusOK, storage.Store.Authors)
+		return
+	}
+
+	var filteredAuthors []models.Author
+
+	for _, author := range storage.Store.Authors {
+		match := true
+
+		if firstName != "" && !strings.Contains(strings.ToLower(author.FirstName), strings.ToLower(firstName)) {
+			match = false
+		}
+
+		if lastName != "" && !strings.Contains(strings.ToLower(author.LastName), strings.ToLower(lastName)) {
+			match = false
+		}
+		
+		if age != "" {
+			ageInt, err := strconv.Atoi(age)
+			if err != nil || author.Age != ageInt {
+				match = false
+			}
+		}
+
+		if match {
+			filteredAuthors = append(filteredAuthors, author)
+		}
+	}
+
+	if filteredAuthors == nil {
+		filteredAuthors = []models.Author{}
+	}
+
+	utils.RespondJSON(w, http.StatusOK, filteredAuthors)
 }
 
 func GetAuthorHandler(w http.ResponseWriter, r *http.Request) {
@@ -87,7 +128,7 @@ func DeleteAuthorHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	
+
 	utils.RespondError(w, http.StatusNotFound, "Author not found")
 }
 func AuthorsRouter(w http.ResponseWriter, r *http.Request) {
