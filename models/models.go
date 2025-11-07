@@ -18,5 +18,5 @@ type Librarian struct {
 	ID        int    `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
-	Age       string `json:"age"`
+	Age       int    `json:"age"`
 }
